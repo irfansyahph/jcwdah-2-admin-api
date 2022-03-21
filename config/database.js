@@ -3,9 +3,9 @@ const util = require('util')
 
 const db = mysql.createPool({
     host: "localhost",
-    user: 'root',
-    password: 'Mercibarn@0705',
-    database: "dbbootcamp",
+    user: "root",
+    password: "677418873",
+    database: "warehouse",
     port: 3306
 })
 
