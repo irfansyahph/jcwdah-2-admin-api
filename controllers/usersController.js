@@ -240,5 +240,27 @@ module.exports = {
             console.log(error)
             res.status(500).send(error)
         }
+    },
+    activingUser: async (req, res) => {
+        try {
+            let sqlActive = `UPDATE users set user_status="Verified" WHERE user_id=${db.escape(req.body.user_id)};`
+            await dbQuery(sqlActive)
+
+            res.status(200).send({ message: "Update Success ✅", sqlActive })
+        } catch (error) {
+            console.log(error)
+            res.status(500).send(error)
+        }
+    },
+    nonActivingUser: async (req, res) => {
+        try {
+            let sqlUnactive = `UPDATE users set user_status="Unverified" WHERE user_id=${db.escape(req.body.user_id)};`
+            await dbQuery(sqlUnactive)
+
+            res.status(200).send({ message: "Update Success ✅", sqlUnactive })
+        } catch (error) {
+            console.log(error)
+            res.status(500).send(error)
+        }
     }
 }

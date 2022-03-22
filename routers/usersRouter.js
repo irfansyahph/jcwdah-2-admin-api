@@ -11,7 +11,10 @@ router.patch('/verified', readToken, usersController.accountVerification);
 router.post('/forgotPassword', usersController.forgotPassword);
 router.post("/resetPassword", usersController.resetPassword);
 router.post("/changePassword", usersController.changePassword);
-router.get('/get-address',readToken, usersController.getAddress);
+router.get('/get-address', readToken, usersController.getAddress);
 router.post('/add-address', usersController.addAddress);
+router.patch('/activing-user', usersController.activingUser);
+router.patch('/non-activing-user', usersController.nonActivingUser);
+
 
 module.exports = router

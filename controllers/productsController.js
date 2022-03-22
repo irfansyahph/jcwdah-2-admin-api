@@ -60,21 +60,13 @@ module.exports = {
     deleteProduct: async (req, res) => {
         try {
             // console.log(req.params)
-            let sqlProduct = `DELETE from products WHERE produk_id=${req.params.produk_id};`
+            let sqlProduct = `DELETE from produk WHERE produk_id=${req.params.produk_id};`
+            let deleteProduct = await dbQuery(sqlProduct)
 
-            let getProductImage = `SELECT produk_id_image from product_image where produk_id=${req.params.produk_id};`
-
-            await dbQuery(sqlProduct)
-
-            getProductImage = await dbQuery(getProductImage);
-
-            console.log(getProductImage)
-            if (getProductImage.length > 0) {
-                for (let i = 0; i < getProductImage.length; i++) {
-                    await dbQuery(`DELETE from product_image WHERE produk_id_image=${getProductImage[i].produk_id_image};`)
-                }
+            if (deleteProduct.affectedRows) {
+                let deleteStok = `DELETE from stok WHERE produk_id=${req.params.produk_id}`
+                await dbQuery(deleteStok)
             }
-
 
             res.status(200).send({ message: "Delete product success ✅" })
 
@@ -83,23 +75,14 @@ module.exports = {
             res.status(500).send(error)
         }
     },
-    updateProduct: async (req, res) => {
+    editProduct: async (req, res) => {
         try {
-            console.log(req.body)
-            let { produk_id, kategori_id, nama_produk, deskripsi_produk, harga_modal, harga_jual, jumlah_stok, gudang_id, images } = req.body
-            // 1. memperbarui data table products utama
-            let resUpdate = await dbQuery(`UPDATE products set kategori_id=${db.escape(kategori_id)}, nama_produk=${db.escape(nama_produk)},
-                deskripsi_produk=${db.escape(deskripsi_produk)},harga_modal=${db.escape(harga_modal)},harga_jual=${db.escape(harga_jual)}, jumlah_stok=${db.escape(jumlah_stok)}, gudang_id=${db.escape(gudang_id)} 
-                WHERE produk_id=${db.escape(produk_id)};`);
-
-            // 2. memperbarui data table product_image
-            images.forEach(async (value, index) => {
-                await dbQuery(`UPDATE product_image set url=${db.escape(value.url)} 
-                    WHERE produk_id_image=${value.produk_id_image}`)
-            })
+            let sqlEdit = `UPDATE produk set nama_produk=${db.escape(req.body.nama_produk)}, kategori=${db.escape(req.body.kategori)}, deskripsi_produk=${db.escape(req.body.deskripsi_produk)}, 
+            harga_modal=${db.escape(req.body.harga_modal)}, harga_jual=${db.escape(req.body.harga_jual)}
+            WHERE produk_id=${db.escape(req.body.produk_id)};`
+            await dbQuery(sqlEdit)
 
             res.status(200).send({ message: "Update product success✅", success: true })
-
         } catch (error) {
             console.log(error)
         }
