@@ -16,5 +16,4 @@ router.post('/add-address', usersController.addAddress);
 router.patch('/activing-user', usersController.activingUser);
 router.patch('/non-activing-user', usersController.nonActivingUser);
 
-
 module.exports = router
